@@ -5,7 +5,7 @@
 class Item {
     constructor(name, quantity, price, store, section, priority) {
         this.name = name;
-        this.quantiy = quantity;
+        this.quantity = quantity;
         this.price = price;
         this.store = store;
         this.section = section;
