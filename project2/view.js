@@ -18,9 +18,22 @@ class ShoppingView {
     
     addRow(item, tbl) {  
         var row = document.createElement("tr");
+
+        switch (item.priority) {
+            case 'high':
+                row.className = 'table-danger';
+                break;
+            case 'medium':
+                row.className = 'table-warning';
+                break;
+            default:
+                row.className = 'table-success';
+        }
+
         var cell0 = document.createElement("td");
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
+        checkbox.checked = Boolean(item.purchased);
         checkbox.onclick = function() {
             item.purchased = checkbox.checked;
         };
@@ -35,6 +48,7 @@ class ShoppingView {
         cell4.innerText = item.section;
         var cell5 = document.createElement("td");
         cell5.innerText = item.price;
+        
         row.appendChild(cell0);
         row.appendChild(cell1);
         row.appendChild(cell2);

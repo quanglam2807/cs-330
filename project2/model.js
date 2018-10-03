@@ -77,9 +77,10 @@ class ShoppingList extends Subject {
     }
 
     cleanPurchased() {
-        this.items = this.items.filter(function(item) { 
-            return item.purchased === true;
+        this.items = this.items.filter(function(item) {
+            return item.purchased != true;
         });
+        console.log(this.items);
         this.publish('update', this);
     }
     
