@@ -6,10 +6,12 @@
 class ShoppingView {
     constructor() {
     }
+
+    redrawList() {
+    }
+    
+    addRow() {
+    }
 }
 
-ShoppingView.prototype.redrawList = function() {
-};
-
-ShoppingView.prototype.addRow = function() {
-};
+ShoppingView.prototype

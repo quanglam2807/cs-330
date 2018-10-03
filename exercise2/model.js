@@ -4,12 +4,12 @@
 
 class Item {
     constructor(name, quantity, price, store, section, priority) {
-        this._name = name;
-        this._quantiy = quantity;
-        this._price = price;
-        this._store = store;
-        this._section = section;
-        this._priority = priority;
+        this.name = name;
+        this.quantiy = quantity;
+        this.price = price;
+        this.store = store;
+        this.section = section;
+        this.priority = priority;
 
         this._purchased = false;
     }
@@ -25,18 +25,19 @@ class Item {
 
 class ShoppingList {
     constructor() {
+        this.items = [];
+    }
+
+
+    addItem(item) {
+        this._items.push(item);
+    }
+
+    cleanList() {
+        this._items.splice(0);
+    }
+
+    emptyList() {
         this._items = [];
     }
 }
-
-ShoppingList.prototype.addItem = function(item) {
-    this._items.push(item);
-};
-
-ShoppingList.prototype.cleanList = function() {
-    this._items.splice(0);
-};
-
-ShoppingList.prototype.emptyItem = function() {
-    this._items = [];
-};
