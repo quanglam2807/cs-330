@@ -80,7 +80,6 @@ class ShoppingList extends Subject {
         this.items = this.items.filter(function(item) {
             return item.purchased != true;
         });
-        console.log(this.items);
         this.publish('update', this);
     }
     

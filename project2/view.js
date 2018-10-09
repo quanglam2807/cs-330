@@ -30,12 +30,21 @@ class ShoppingView {
                 row.className = 'table-success';
         }
 
+        if (item.purchased) {
+            row.classList.add('selected');
+        }
+
         var cell0 = document.createElement("td");
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.checked = Boolean(item.purchased);
         checkbox.onclick = function() {
             item.purchased = checkbox.checked;
+            if (checkbox.checked) {
+                row.classList.add('selected');
+            } else {
+                row.classList.remove('selected');
+            }
         };
         cell0.appendChild(checkbox);
         var cell1 = document.createElement("td");
