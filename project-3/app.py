@@ -11,7 +11,7 @@ app = Flask(__name__)
 alphabet = list(string.ascii_lowercase)
 
 # https://www.thewordfinder.com/scrabble-point-values.php
-scores = {
+letterScores = {
     'a': 1,
     'b': 3,
     'c': 3,
@@ -43,7 +43,20 @@ scores = {
 def getWordScore(word): 
     score = 0
     for i in range(len(word)):
-        score = score + scores[word[i]]
+        score = score + letterScores[word[i]]
+
+    return score
+
+def getWordScoreWithLetters(word, letters): 
+    score = 0
+    lst = list(letters)
+
+    for i in range(len(word)):
+        if word[i] in lst:
+            lst.remove(word[i])
+            score = score + letterScores[word[i]]
+        elif '*' in lst and word[i] in alphabet:
+            lst.remove('*')
 
     return score
 
@@ -89,47 +102,46 @@ def index():
         existingLetters = '' if request.form.get('existingLetters') is None else request.form.get('existingLetters')
         dictCode = request.form['dictCode']
 
-        # dictPath = 'american-english' if dictCode == 'en-gb' else 'british-english' 
-        dictPath = '/usr/share/dict/american-english' if dictCode == 'en-gb' else '/usr/share/dict/british-english' 
+        dictPath = 'american-english' if dictCode == 'en-gb' else 'british-english' 
+        # dictPath = '/usr/share/dict/american-english' if dictCode == 'en-gb' else '/usr/share/dict/british-english' 
         f = open(dictPath, 'r')
         dictLst = [x.lower() for x in f.read().split('\n')]
 
-        words = set([])
+        results = {}
+
+        def addWord(word, score):
+            results[word] = {
+                'word': word,
+                'length': len(word),
+                'score': score
+            }
 
         for word in dictLst:
             if len(word) < 2:
                 continue
 
-            if isValid(word, letters):
-                words.add(word)
-
             if enableExistingLetters == 'on':
                 # Case 1
                 for l in list(existingLetters):
-                    if l in word and isValid(word.replace(l, ''), letters):
-                        words.add(word)
+                    if l in word and isValid(word.replace(l, '', 1), letters):
+                        addWord(word, getWordScore(l) + getWordScoreWithLetters(word.replace(l, ''), letters))
 
                 # Case Prefix
                 if word.endswith(existingLetters):
                     if isValid(word[:-len(existingLetters)], letters):
-                        words.add(word)
+                        addWord(word, getWordScore(existingLetters) + getWordScoreWithLetters(word[:-len(existingLetters)], letters))
                 
                 # Case Suffix
                 if word.startswith(existingLetters):
                     if isValid(word[len(existingLetters):], letters):
-                        words.add(word)
-
-        results = []
-        for word in words:
-            results.append({
-                'word': word,
-                'length': len(word),
-                'score': getWordScore(word)
-            })
+                        addWord(word, getWordScore(existingLetters) + getWordScoreWithLetters(word[len(existingLetters):], letters))
+            else:
+                if isValid(word, letters):
+                    addWord(word, getWordScoreWithLetters(word, letters))
 
         return render_template(
             'index.html', 
-            results=results, 
+            results=results.values(), 
             letter1=request.form['letter1'],
             letter2=request.form['letter2'],
             letter3=request.form['letter3'],
