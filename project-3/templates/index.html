@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Scrabble Helper</h1>
+    <hr />
+    <form method="POST">
+        <div class="row">
+            <div class="col-sm"><input class="form-control" type="text" name="letter1" maxlength="1" placeholder="?" value="{{ letter1 }}"></div>
+            <div class="col-sm"><input class="form-control" type="text" name="letter2" maxlength="1" placeholder="?" value="{{ letter2 }}"></div>
+            <div class="col-sm"><input class="form-control" type="text" name="letter3" maxlength="1" placeholder="?" value="{{ letter3 }}"></div>
+            <div class="col-sm"><input class="form-control" type="text" name="letter4" maxlength="1" placeholder="?" value="{{ letter4 }}"></div>
+            <div class="col-sm"><input class="form-control" type="text" name="letter5" maxlength="1" placeholder="?" value="{{ letter5 }}"></div>
+            <div class="col-sm"><input class="form-control" type="text" name="letter6" maxlength="1" placeholder="?" value="{{ letter6 }}"></div>
+            <div class="col-sm"><input class="form-control" type="text" name="letter7" maxlength="1" placeholder="?" value="{{ letter7 }}"></div>
+        </div>
+        <br/>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    Attach to existing letters&nbsp;
+                    <input type="checkbox" name="enableExistingLetters" aria-label="Check to enable the input" {% if enableExistingLetters == 'on' %}checked{% endif %}>
+                </div>
+            </div>
+            <input type="text" name="existingLetters" class="form-control" aria-label="Existing letters" placeholder="Existing letters" disabled value="{{ existingLetters }}">
+        </div>
+        <select class="form-control" name="dictCode">
+            <option value="en-us" {% if dictCode == 'en-us' %}selected="selected"{% endif %}>American English</option>
+            <option value="en-gb" {% if dictCode == 'en-gb' %}selected="selected"{% endif %}>British English</option>
+        </select>
+        <br/>
+        <input type="submit" name="submit" value="Help Me" class="btn btn-primary btn-block">
+
+        <br />
+        <table class="table table-striped" id="dataTable">
+        <thead>
+            <tr>
+            <th>Word</th>
+            <th>Length</th>
+            <th>Score Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in results %}
+            <tr>    
+                <td>{{ item.word }}</td>
+                <td>{{ item.length }}</td>
+                <td>{{ item.score }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </form>
+</div>
+
+{% endblock %}
