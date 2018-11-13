@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+        <div class="row" style="margin: 20px 0">
+            <div class="col-4 text-center">
+                <a href="/continent">Continent</a>
+            </div>
+            <div class="col-4 text-center">
+                <a href="/region">Region</a>
+            </div>
+            <div class="col-4 text-center">
+                <a href="/country">Country</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Country Name</th>
+                            <th scope="col">Continent</th>
+                            <th scope="col">Region</th>
+                            <th scope="col">Capital Name</th>
+                            <th scope="col">Surface Area</th>
+                            <th scope="col">Population</th>
+                            <th scope="col">Form of Government</th>
+                            <th scope="col">Head of State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for o in results %}
+                        <tr>
+                            <td>{{o.name}}</td>
+                            <td>{{o.continent}}</td>
+                            <td>{{o.region}}</td>
+                            <td>{{o.capitalname}}</td>
+                            <td>{{o.surfacearea}}</td>
+                            <td>{{o.population}}</td>
+                            <td>{{o.governmentform}}</td>
+                            <td>{{o.headofstate}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col">
+                            <select class="form-control" name="code">
+                                {% for o in options %}
+                                <option value="{{o[0]}}" {% if code == o[0] %}selected="selected"{% endif %}>{{o[1]}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="">
+                            <input type="submit" class="btn btn-primary" value="Get Info">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
