@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="edit">
+<section class="section" v-if="preview">
+    <div class="container">
+        <h1 class="title">[[ title || 'Untitled' ]] <button class="button is-pulled-right" v-on:click="exitPreview">Exit Preview</button></h1>
+        <h2 class="subtitle">[[ author || 'Unknown' ]] - [[ new Date().getMonth() ]]/[[ new Date().getDate() ]]/[[ new Date().getFullYear() ]]</h2>
+        <div class="content">
+            [[ content ]]
+        </div>
+    </div>
+</section>
+
+<section class="section" v-else>
+    <form method="POST">
+    <div class="container">
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" type="text" placeholder="Title" name="title" v-model="title" v-on:input="autoSave">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-heading"></i>
+                            </span>
+                        </p>
+                        </div>
+                        <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" type="text" placeholder="Author" name="author" v-model="author" v-on:input="autoSave">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </p>
+                </div>
+            </div>
+            <div class="column is-narrow">
+                <div class="field is-grouped">
+                    <div class="control">
+                    <button class="button is-link">{% if id is defined %}Save & View{% else %}Publish{% endif %}</button>
+                    </div>
+                    <div class="control">
+                        <a class="button" v-on:click="enterPreview">Preview</a>
+                    </div>
+                    <div class="control">
+                    {% if id == None %}
+                    <a class="button is-text" v-on:click="cancelPublishing">Cancel</a>
+                    {% endif %}
+                    </div>
+                </div>
+
+                <div class="field is-grouped">
+                    <div class="control" style="display: flex;justify-content: center;align-items: center;">
+                        <label class="checkbox">
+                        <input type="checkbox" v-model="useAutoSave">
+                        Auto save
+                        </label>
+                    </div>
+                    <div class="control">
+                        <a class="button" v-if="saved" disabled>Saved</a>
+                        <a class="button" v-on:click="save" v-else>Save</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <textarea class="textarea full-height" placeholder="e.g. Hello world" name="content" v-model="content"  v-on:input="autoSave"></textarea>
+    </div>
+</form>
+</section>
+</div>
+
+<script>
+var app = new Vue({
+  el: '#edit',
+  data: {
+    title: '{{ title }}',
+    author: '{{ author }}',
+    content: '{{ content }}',
+    preview: false,
+    saved: false,
+    useAutoSave: true,
+  },
+  methods: {
+    save: function() {
+        fetch('/api/edit/{{ id }}', {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title: this.title,
+                author: this.author,
+                content: this.content,
+            })
+        })
+        .then(() => {
+            this.saved = true;
+        });
+    },
+    autoSave: function() {
+        this.saved = false;
+        if (this.useAutoSave) {
+            this.save();
+        }
+    },
+    enterPreview: function () {
+        this.preview = true;
+    },
+    exitPreview: function () {
+        this.preview = false;
+    },
+    cancelPublishing: function () {
+      this.title = '';
+      this.author = '';
+      this.content = '';
+    }
+  },
+  delimiters: ['[[',']]']
+});
+</script>
+
+{% endblock %}
