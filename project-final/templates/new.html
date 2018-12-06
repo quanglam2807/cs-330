@@ -24,14 +24,14 @@
     <form method="POST">
     <div class="container">
         <div class="row">
-            <div class="col-sm align-middle">
+            <div class="col-sm">
                 <div class="form-row align-items-center">
                     <div class="col-12">
                         <div class="input-group mb-12 mb-3">
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fas fa-heading"></i></div>
                         </div>
-                        <input class="form-control" type="text" placeholder="Title" name="title" v-model="title" v-on:input="autoSave">
+                        <input class="form-control" type="text" placeholder="Title" name="title" v-model="title">
                         </div>
                     </div>
                 </div>
@@ -41,34 +41,19 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fas fa-user"></i></div>
                         </div>
-                        <input class="form-control" type="text" placeholder="Author" name="author" v-model="author" v-on:input="autoSave">
+                        <input class="form-control" type="text" placeholder="Author" name="author" v-model="author">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm is-narrow">
-                <div class="float-right mb-2">
-                    <button class="btn btn-primary ">Save & View</button>
+                <div class="float-right">
+                    <button class="btn btn-primary">Publish</button>
                     <a class="btn btn-secondary" href="#" v-on:click="enterPreview">Preview</a>
-                </div>
-
-                <div class="form-inline float-right">
-                    <div class="form-group mb-2">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" v-model="useAutoSave" id="useAutoSave">
-                            <label class="form-check-label" for="useAutoSave">
-                                Auto save
-                            </label>
-                            </div>
-                    </div>
-                    <div class="form-group mb-2">
-                        <button class="btn btn-secondary ml-2" v-if="saved" disabled>Saved</button>
-                        <a class="btn btn-secondary ml-2" href="#" v-on:click="save" v-else>Save</a>
-                    </div>
                 </div>
             </div>
         </div>
-        <textarea class="form-control full-height mt-2" placeholder="e.g. Hello world" name="content" v-model="content"  v-on:input="autoSave"></textarea>
+        <textarea class="form-control full-height mt-2" placeholder="e.g. Hello world" name="content" v-model="content" ></textarea>
     </div>
 </form>
 </section>
@@ -82,33 +67,8 @@ var app = new Vue({
     author: '{{ author }}',
     content: '{{ content }}',
     preview: false,
-    saved: false,
-    useAutoSave: false,
   },
   methods: {
-    save: function() {
-        fetch('/api/edit/{{ id }}', {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                title: this.title,
-                author: this.author,
-                content: this.content,
-            })
-        })
-        .then(() => {
-            this.saved = true;
-        });
-    },
-    autoSave: function() {
-        this.saved = false;
-        if (this.useAutoSave) {
-            this.save();
-        }
-    },
     enterPreview: function () {
         this.preview = true;
     },

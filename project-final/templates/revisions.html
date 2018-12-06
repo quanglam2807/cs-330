@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section" v-if="preview">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <h1 class="display-5">Revisions</h1>
+            </div>
+            <div class="col-sm is-narrow">
+                <a class="btn btn-primary" href="/read/{{ postId }}">View Latest Revision</a>
+            </div>
+        </div>
+        <hr />
+        <div class="content mt-2">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for revision in revisions %}
+                    <tr>
+                    <td>{{ revision.date }}</td>
+                    <td><a class="btn" href="/revision/{{ revision.id }}">View</a></td>
+                    </tr>      
+                    {% endfor %}              
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

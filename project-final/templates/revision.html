@@ -3,16 +3,15 @@
 {% block content %}
 <section class="section" v-if="preview">
     <div class="container">
+        <div class="alert alert-warning" role="alert">
+            This might be an old revision. <a href="/read/{{ postId }}">View Latest Revision</a> or <a href="/revisions/{{ postId }}">View List of All Revisions</a>.
+        </div>
         <div class="row">
             <div class="col-sm">
                 <h1 class="display-5">{{ title }}</h1>
-                <p class="text-muted display-6">{{ author }} - {{ date }} - {{ viewCount }} views</p>
+                <p class="text-muted display-6">{{ author }} - {{ date }}</p>
             </div>
             <div class="col-sm is-narrow">
-                <a class="btn btn-secondary float-right" href="/edit/{{ id }}">Edit</a>
-                <a class="btn btn-secondary float-right mr-2 mb-2" href="/revisions/{{ id }}">Revisions</a>
-                <br />
-                <a class="btn btn-primary float-right" href="/">New</a>
             </div>
         </div>
         <hr />
